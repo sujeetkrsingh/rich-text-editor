@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rich Text Editor - Help & Usage Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f4f6fa;
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #23272e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .site-header {
+      background: #18181b;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(24,24,27,0.07);
+      width: 100%;
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7em 1.5em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+    }
+    .logo {
+      width: 38px;
+      height: 38px;
+      background: #2563eb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .site-title {
+      font-size: 1.25em;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #fff;
+    }
+    nav {
+      display: flex;
+      gap: 1.5em;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.04em;
+      transition: color 0.2s;
+      padding: 2px 0;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover, nav a.active {
+      color: #fde047;
+      border-bottom: 2px solid #fde047;
+    }
+    main {
+      flex: 1 1 auto;
+      max-width: 900px;
+      margin: 2em auto 0 auto;
+      background: #fff;
+      padding: 2em 1.5em 2em 1.5em;
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(24,24,27,0.06);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h1, h2, h3 {
+      color: #18181b;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.3em; margin-top: 2em; }
+    h3 { font-size: 1.1em; }
+    pre, code {
+      background: #f3f4f6;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    }
+    pre {
+      padding: 1em;
+      overflow-x: auto;
+      margin-bottom: 1em;
+    }
+    .toc {
+      background: #f1f5f9;
+      border: 1px solid #e5e7eb;
+      padding: 1em;
+      border-radius: 6px;
+      margin-bottom: 2em;
+    }
+    a { color: #2563eb; }
+    ul, ol { margin-bottom: 1.2em; }
+    .site-footer {
+      background: #18181b;
+      color: #cbd5e1;
+      text-align: center;
+      padding: 1.2em 0 1em 0;
+      font-size: 1em;
+      margin-top: 3em;
+      letter-spacing: 0.01em;
+      width: 100%;
+    }
+    .site-footer a {
+      color: #fde047;
+      text-decoration: none;
+    }
+    .code-block-wrapper {
+      position: relative;
+      margin-bottom: 1.5em;
+      margin-top: 1.2em;
+    }
+    .code-block {
+      display: flex;
+      background: #18181b;
+      color: #f3f4f6;
+      border-radius: 6px;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+      font-size: 1em;
+      overflow: auto;
+      box-shadow: 0 2px 8px rgba(24,24,27,0.07);
+    }
+    .code-lines {
+      background: #23272e;
+      color: #a1a1aa;
+      padding: 1em 8px 1em 12px;
+      text-align: right;
+      user-select: none;
+      font-size: 1em;
+      line-height: 1.5;
+      min-width: 2.2em;
+      border-radius: 6px 0 0 6px;
+      border-right: 1px solid #27272a;
+    }
+    .code-content {
+      padding: 1em 1em 1em 0.7em;
+      white-space: pre;
+      min-width: 0;
+      flex: 1 1 auto;
+      background: transparent;
+      border-radius: 0 6px 6px 0;
+      font-size: 1em;
+      line-height: 1.5;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.25em 0.9em;
+      font-size: 0.98em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.18s;
+      z-index: 2;
+    }
+    .copy-btn:hover {
+      background: #1d4ed8;
+    }
+    @media (max-width: 900px) {
+      main, .header-inner { max-width: 100%; }
+      main { border-radius: 0; }
+    }
+    @media (max-width: 600px) {
+      .header-inner, main { padding: 1em 0.5em; }
+      nav { gap: 0.7em; }
+      .logo { width: 32px; height: 32px; font-size: 1.2em; }
+      h1 { font-size: 1.3em; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-title">
+        <span class="logo" title="Rich Text Editor">📝</span>
+        <span class="site-title">Rich Text Editor</span>
+      </div>
+      <nav>
+        <a href="index.html">Demo</a>
+        <a href="help.html" class="active">Help</a>
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1>Rich Text Editor &mdash; Help & Usage Guide</h1>
+    <div class="toc">
+      <b>Table of Contents</b>
+      <ul>
+        <li><a href="#install">Installation</a></li>
+        <li><a href="#basic-usage">Basic Usage</a></li>
+        <li><a href="#custom-toolbar">Customizing the Toolbar</a></li>
+        <li><a href="#form-integration">Form Integration</a></li>
+        <li><a href="#features">Supported Features</a></li>
+        <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+
+    <h2 id="install">Installation</h2>
+    <ol>
+      <li>
+        <b>Copy the files</b>:
+        <ul>
+          <li><code>rich-text-editor.js</code></li>
+          <li><code>rich-text-editor.css</code></li>
+        </ul>
+        Place them in your project directory.
+      </li>
+      <li>
+        <b>Include the CSS and JS in your HTML:</b>
+        <div class="code-block-wrapper">
+          <button class="copy-btn" onclick="(function(btn){
+            const code = btn.parentElement.querySelector('.code-content').innerText;
+            navigator.clipboard.writeText(code);
+            btn.textContent = 'Copied!';
+            setTimeout(()=>{btn.textContent='Copy';}, 1200);
+          })(this)">Copy</button>
+          <div class="code-block">
+            <div class="code-lines" aria-hidden="true"></div>
+            <div class="code-content">
+&lt;link rel="stylesheet" href="rich-text-editor.css"&gt;
+&lt;script src="rich-text-editor.js"&gt;&lt;/script&gt;
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <h2 id="basic-usage">Basic Usage</h2>
+    <ol>
+      <li>
+        Add a <code>&lt;textarea&gt;</code> with the class <code>js-rich-text-editor</code>:
+        <div class="code-block-wrapper">
+          <button class="copy-btn" onclick="(function(btn){
+            const code = btn.parentElement.querySelector('.code-content').innerText;
+            navigator.clipboard.writeText(code);
+            btn.textContent = 'Copied!';
+            setTimeout(()=>{btn.textContent='Copy';}, 1200);
+          })(this)">Copy</button>
+          <div class="code-block">
+            <div class="code-lines" aria-hidden="true"></div>
+            <div class="code-content">
+&lt;textarea class="js-rich-text-editor" name="content"&gt;&lt;/textarea&gt;
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        On page load, the editor will automatically replace the textarea with a rich text editor.
+      </li>
+    </ol>
+
+    <h2 id="custom-toolbar">Customizing the Toolbar</h2>
+    <p>
+      You can customize which tools appear in the toolbar and their order by defining a global <code>window.RichTextEditorConfig</code> object <b>before</b> loading the JS file:
+    </p>
+    <div class="code-block-wrapper">
+      <button class="copy-btn" onclick="(function(btn){
+        const code = btn.parentElement.querySelector('.code-content').innerText;
+        navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        setTimeout(()=>{btn.textContent='Copy';}, 1200);
+      })(this)">Copy</button>
+      <div class="code-block">
+        <div class="code-lines" aria-hidden="true"></div>
+        <div class="code-content">
+&lt;script&gt;
+window.RichTextEditorConfig = {
+  toolbar: [
+    'bold', 'italic', 'underline', 'separator',
+    'foreColor', 'hiliteColor', 'separator',
+    'insertUnorderedList', 'insertOrderedList', 'separator',
+    'createLink', 'unlink', 'separator',
+    'table', 'emoji', 'specialChar', 'datetime', 'separator',
+    'fullscreen', 'preview', 'print', 'source', 'help'
+  ]
+};
+&lt;/script&gt;
+&lt;script src="rich-text-editor.js"&gt;&lt;/script&gt;
+        </div>
+      </div>
+    </div>
+    <p>
+      <b>Available tool keys:</b>
+      <code>undo</code>, <code>redo</code>, <code>bold</code>, <code>italic</code>, <code>underline</code>, <code>strikethrough</code>, <code>superscript</code>, <code>subscript</code>, <code>fontName</code>, <code>fontSize</code>, <code>foreColor</code>, <code>hiliteColor</code>, <code>justifyLeft</code>, <code>justifyCenter</code>, <code>justifyRight</code>, <code>justifyFull</code>, <code>outdent</code>, <code>indent</code>, <code>insertUnorderedList</code>, <code>insertOrderedList</code>, <code>formatBlock</code>, <code>createLink</code>, <code>unlink</code>, <code>insertImage</code>, <code>removeFormat</code>, <code>table</code>, <code>specialChar</code>, <code>emoji</code>, <code>fullscreen</code>, <code>preview</code>, <code>print</code>, <code>datetime</code>, <code>source</code>, <code>help</code>, <code>separator</code>
+    </p>
+
+    <h2 id="form-integration">Form Integration</h2>
+    <p>
+      The editor keeps a hidden textarea in sync with the rich text content, so you can submit the form as usual:
+    </p>
+    <div class="code-block-wrapper">
+      <button class="copy-btn" onclick="(function(btn){
+        const code = btn.parentElement.querySelector('.code-content').innerText;
+        navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        setTimeout(()=>{btn.textContent='Copy';}, 1200);
+      })(this)">Copy</button>
+      <div class="code-block">
+        <div class="code-lines" aria-hidden="true"></div>
+        <div class="code-content">
+&lt;form&gt;
+  &lt;textarea class="js-rich-text-editor" name="content"&gt;&lt;/textarea&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+        </div>
+      </div>
+    </div>
+
+    <h2 id="features">Supported Features</h2>
+    <ul>
+      <li>Text formatting: bold, italic, underline, strikethrough, superscript, subscript</li>
+      <li>Font family and font size (8pt–36pt)</li>
+      <li>Text color (<b><svg width="18" height="18" style="vertical-align:middle"><text x="2" y="14" font-size="13" font-family="Arial" fill="#222" font-weight="bold">A</text><rect x="2" y="15" width="14" height="2" fill="#e11d48" stroke="#e11d48"/></svg> Text Color</b>) and highlight (<b><svg width="18" height="18" style="vertical-align:middle"><rect x="3" y="11" width="12" height="4" rx="1" fill="#fde047" stroke="#eab308" stroke-width="1"/><rect x="7" y="7" width="4" height="6" rx="1" fill="#fde047" stroke="#eab308" stroke-width="1"/><rect x="8" y="4" width="2" height="4" rx="1" fill="#fde047" stroke="#eab308" stroke-width="1"/></svg> Highlight</b>)</li>
+      <li>Text alignment: left, center, right, justify</li>
+      <li>Indent/outdent</li>
+      <li>Ordered and unordered lists</li>
+      <li>Block formats: headings, paragraph, pre, blockquote</li>
+      <li>Links and images (with modal for image upload or link, width/height, alt, and image editing/removal)</li>
+      <li>Click on an image in the editor to edit its source, width, height, alt, or remove it</li>
+      <li>Insert table (custom rows/columns)</li>
+      <li>Insert special characters (popup)</li>
+      <li>Insert emojis (popup)</li>
+      <li>Insert current date/time</li>
+      <li>Undo/redo</li>
+      <li>Remove formatting</li>
+      <li><b>Source code mode</b>: Toggle to view/edit HTML source directly (with line numbers)</li>
+      <li>Preview mode (popup)</li>
+      <li>Print editor content</li>
+      <li>Full screen mode</li>
+      <li>Customizable toolbar</li>
+      <li>Responsive design</li>
+      <li>No dependencies</li>
+      <li>Keyboard shortcuts for all major commands (see <b>Help</b> icon in toolbar)</li>
+      <li>Toolbar buttons reflect current selection formatting</li>
+      <li>Accessible tooltips for all toolbar buttons</li>
+      <li><b>Word and character count</b> in the editor footer</li>
+      <li><b>Multiple editors per page</b> with different toolbars/configurations</li>
+      <li><b>Editor in modal dialogs</b> and as email compose box (see demo)</li>
+    </ul>
+
+    <h2 id="shortcuts">Keyboard Shortcuts</h2>
+    <p>
+      <b>Windows/Linux:</b> Use <kbd>Ctrl</kbd> or <kbd>Ctrl+Shift</kbd> combinations.<br>
+      <b>Mac:</b> Use <kbd>⌘</kbd> or <kbd>⌘+Shift</kbd> combinations.<br>
+      <b>See the <i class="fa-solid fa-circle-question"></i> Help button in the toolbar for a full list in your browser.</b>
+    </p>
+    <ul>
+      <li><kbd>Ctrl/⌘+B</kbd>: Bold</li>
+      <li><kbd>Ctrl/⌘+I</kbd>: Italic</li>
+      <li><kbd>Ctrl/⌘+U</kbd>: Underline</li>
+      <li><kbd>Ctrl/⌘+Z</kbd>: Undo</li>
+      <li><kbd>Ctrl/⌘+Y</kbd>: Redo</li>
+      <li><kbd>Ctrl/⌘+L</kbd> or <kbd>Ctrl/⌘+K</kbd>: Insert Link</li>
+      <li><kbd>Ctrl/⌘+P</kbd>: Print</li>
+      <li><kbd>Ctrl/⌘+Shift+S</kbd>: Source Code Mode</li>
+      <li><kbd>Ctrl/⌘+Shift+F</kbd>: Full Screen</li>
+      <li><kbd>Ctrl/⌘+Shift+P</kbd>: Preview</li>
+      <li><kbd>Ctrl/⌘+Shift+T</kbd>: Insert Table</li>
+      <li><kbd>Ctrl/⌘+Shift+E</kbd>: Insert Emoji</li>
+      <li><kbd>Ctrl/⌘+Shift+C</kbd>: Insert Special Character</li>
+      <li><kbd>Ctrl/⌘+Shift+D</kbd>: Insert Date/Time</li>
+      <li><kbd>Ctrl/⌘+Shift+R</kbd>: Remove Format</li>
+    </ul>
+
+    <h2 id="faq">FAQ</h2>
+    <b>Q: How do I edit or remove an image after inserting?</b><br>
+    A: Click on the image in the editor. A modal will open where you can change the image URL, upload a new image, set width/height (in px or %), alt text, or remove the image.<br><br>
+    <b>Q: How do I edit the HTML source?</b><br>
+    A: Add <code>source</code> to your toolbar config. Click the <svg width="18" height="18" style="vertical-align:middle"><polyline points="7,5 3,9 7,13" fill="none" stroke="#2563eb" stroke-width="2"/><polyline points="11,5 15,9 11,13" fill="none" stroke="#2563eb" stroke-width="2"/></svg> icon to toggle between WYSIWYG and HTML source mode.<br><br>
+    <b>Q: How do I see all keyboard shortcuts?</b><br>
+    A: Click the <svg width="18" height="18" style="vertical-align:middle"><circle cx="9" cy="9" r="7" fill="#f3f4f6" stroke="#2563eb" stroke-width="1.5"/><text x="7" y="13" font-size="10" fill="#2563eb">?</text></svg> Help icon at the end of the toolbar.<br><br>
+    <b>Q: Can I use all features on Mac?</b><br>
+    A: Yes, all features and shortcuts work on Mac using the <kbd>⌘</kbd> key.<br><br>
+    <b>Q: Can I use multiple editors on one page?</b><br>
+    A: Yes, you can add as many <code>textarea.js-rich-text-editor</code> elements as you want, each with its own configuration.<br><br>
+    <b>Q: How do I customize the toolbar for a specific editor?</b><br>
+    A: Use <code>window.RichTextEditorConfig['#editorId'] = [ ... ]</code> or a CSS selector as the key.<br><br>
+    <b>Q: Can I use the editor in a modal or popup?</b><br>
+    A: Yes, the editor works inside modals and dialogs. See the demo for an example.<br><br>
+    <b>Q: How do I add a word/character count?</b><br>
+    A: The editor includes a footer with live word and character count by default.<br><br>
+    <b>Q: Is the editor responsive?</b><br>
+    A: Yes, the editor and toolbar are fully responsive and adapt to different screen sizes.<br><br>
+    <b>Q: Can I use my own icons?</b><br>
+    A: The editor uses SVG icons by default. You can customize the icons in the JS file.<br><br>
+    <b>Q: Is the editor accessible?</b><br>
+    A: The editor uses semantic HTML, ARIA labels, and keyboard navigation for accessibility.<br><br>
+    <b>Q: Does the editor support undo/redo?</b><br>
+    A: Yes, undo/redo is supported via toolbar buttons and keyboard shortcuts.<br><br>
+    <b>Q: Can I print the editor content?</b><br>
+    A: Yes, use the print button or <kbd>Ctrl/⌘+P</kbd> shortcut.<br><br>
+    <b>Q: How do I insert tables, emojis, or special characters?</b><br>
+    A: Use the respective toolbar buttons to open modals for tables, emojis, or special characters.<br><br>
+    <b>Q: Can I disable or hide certain features?</b><br>
+    A: Yes, simply remove the tool from the toolbar config array.<br><br>
+    <b>Q: Is there a way to preview the HTML output?</b><br>
+    A: Yes, click the preview button (<svg width="18" height="18" style="vertical-align:middle"><ellipse cx="9" cy="9" rx="7" ry="5" fill="#f3f4f6" stroke="#2563eb" stroke-width="1.5"/><circle cx="9" cy="9" r="2" fill="#2563eb"/></svg>) in the toolbar.<br><br>
+    <b>Q: How do I upload images?</b><br>
+    A: Use the image button, then select "Upload Image" in the modal. The image is embedded as a Data URL.<br><br>
+    <b>Q: Can I use the editor in a form and submit HTML?</b><br>
+    A: Yes, the hidden textarea is kept in sync for form submission.<br><br>
+    <b>Q: Is there a dark mode?</b><br>
+    A: The editor uses a light theme by default, but you can override styles for dark mode.<br><br>
+    <b>Q: Is there any dependency?</b><br>
+    A: No, the editor is pure JavaScript and CSS, with no external dependencies.<br><br>
+    <b>Q: Is document.execCommand deprecated?</b><br>
+    A: Yes, but it is still supported in all major browsers as of 2024. This library uses it for compatibility.<br><br>
+  </main>
+  <footer class="site-footer">
+    &copy; 2024 Rich Text Editor &mdash; <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+  <script>
+  // Add line numbers to all code blocks automatically
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.code-block').forEach(function(block) {
+      const code = block.querySelector('.code-content');
+      const lines = code.innerText.split('\n').length;
+      const linesHtml = Array.from({length: lines}, (_, i) => (i+1)).join('<br>');
+      block.querySelector('.code-lines').innerHTML = linesHtml;
+    });
+  });
+  </script>
+</body>
+</html>

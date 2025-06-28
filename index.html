@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rich Text Editor Demo - Multiple Use Cases</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="src/rich-text-editor.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f6fa;
+            margin: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: #23272e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            background: #18181b;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(24, 24, 27, 0.07);
+            width: 100%;
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7em 1.5em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            background: #2563eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .site-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5em;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: color 0.2s;
+            padding: 2px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #fde047;
+            border-bottom: 2px solid #fde047;
+        }
+
+        main {
+            flex: 1 1 auto;
+            max-width: 900px;
+            margin: 2em auto 0 auto;
+            background: #fff;
+            padding: 2em 1.5em 2em 1.5em;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(24, 24, 27, 0.06);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #18181b;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.1em;
+        }
+
+        form {
+            margin: 0 auto 2em auto;
+            background: #fff;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: none;
+        }
+
+        label {
+            font-weight: 600;
+            color: #23272e;
+            margin-bottom: 0.5em;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .output {
+            margin-top: 2em;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            padding: 1em;
+            border-radius: 6px;
+            font-size: 0.97em;
+            word-break: break-all;
+        }
+
+        button[type="submit"] {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 0.7em 2.2em;
+            border-radius: 6px;
+            font-size: 1.08em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.2em;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
+        }
+
+        button[type="submit"]:hover {
+            background: #1d4ed8;
+        }
+
+        .site-footer {
+            background: #18181b;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 1.2em 0 1em 0;
+            font-size: 1em;
+            margin-top: 3em;
+            letter-spacing: 0.01em;
+            width: 100%;
+        }
+
+        .site-footer a {
+            color: #fde047;
+            text-decoration: none;
+        }
+
+        .editor-demo-block {
+            margin-bottom: 3em;
+            padding-bottom: 2em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .editor-demo-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .desc {
+            color: #64748b;
+            font-size: 1em;
+            margin-bottom: 1.2em;
+        }
+
+        @media (max-width: 900px) {
+
+            main,
+            .header-inner {
+                max-width: 100%;
+            }
+
+            main {
+                border-radius: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .header-inner,
+            main {
+                padding: 1em 0.5em;
+            }
+
+            nav {
+                gap: 0.7em;
+            }
+
+            .logo {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2em;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-title">
+                <span class="logo" title="Rich Text Editor">📝</span>
+                <span class="site-title">Rich Text Editor</span>
+            </div>
+            <nav>
+                <a href="index.html" class="active">Demo</a>
+                <a href="help.html">Help</a>
+                <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1>Rich Text Editor Demo &mdash; Multiple Use Cases</h1>
+
+        <div class="editor-demo-block">
+            <h2>1. Full-featured Editor</h2>
+            <div class="desc">All features enabled. Try formatting, inserting tables, images, emojis, preview, print,
+                source code, etc.</div>
+            <form id="demo-form-1">
+                <label for="editor1">Full Editor:</label>
+                <textarea id="editor1" class="js-rich-text-editor" name="content1" rows="12">
+<h1>Full-featured Editor</h1>
+<p><b>Bold</b>, <i>Italic</i>, <u>Underline</u>, <s>Strikethrough</s>, <sup>Superscript</sup>, <sub>Subscript</sub></p>
+<p style="color:#e11d48;">Text Color</p>
+<p style="background: #fef08a;">Highlight</p>
+<p style="font-family: 'Courier New', Courier, monospace;">Font Family: Courier New</p>
+<p style="font-size:24pt;">Font Size: 24pt</p>
+<p style="text-align:left;">Align Left</p>
+<p style="text-align:center;">Align Center</p>
+<p style="text-align:right;">Align Right</p>
+<p style="text-align:justify;">Justify</p>
+<blockquote>This is a blockquote.</blockquote>
+<pre>Preformatted
+  Text
+    Example</pre>
+<ul>
+  <li>Unordered List Item 1</li>
+  <li>Unordered List Item 2</li>
+</ul>
+<ol>
+  <li>Ordered List Item 1</li>
+  <li>Ordered List Item 2</li>
+</ol>
+<p>Link: <a href="https://github.com/">GitHub</a></p>
+<p>Image: <img src="https://placekitten.com/80/80" style="width:80px;height:80px;" alt="Kitten"></p>
+<p>Table:</p>
+<table style="border-collapse:collapse;width:100%">
+  <tr>
+    <td style="border:1px solid #ccc;padding:4px;">A1</td>
+    <td style="border:1px solid #ccc;padding:4px;">B1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc;padding:4px;">A2</td>
+    <td style="border:1px solid #ccc;padding:4px;">B2</td>
+  </tr>
+</table>
+<p>Special Character: &copy; &euro; &infin; &sect;</p>
+<p>Emoji: 😀 😎 🐱‍👤 🎉</p>
+<p>Date/Time: <span id="sample-datetime"></span></p>
+        </textarea>
+                <br>
+                <button type="submit">Submit</button>
+                <div class="output" id="output1" style="display:none"></div>
+            </form>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>2. Minimal Editor</h2>
+            <div class="desc">Only basic formatting, lists, and links. Great for comments or simple notes.</div>
+            <form id="demo-form-2">
+                <label for="editor2">Minimal Editor:</label>
+                <textarea id="editor2" class="js-rich-text-editor" name="content2" rows="6">
+Simple <b>bold</b>, <i>italic</i>, <u>underline</u>, <a href="#">link</a>, and lists.
+        </textarea>
+                <br>
+                <button type="submit">Submit</button>
+                <div class="output" id="output2" style="display:none"></div>
+            </form>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>3. Editor with Custom Toolbar (No Images, No Tables)</h2>
+            <div class="desc">No image, table, or emoji support. Useful for blog comments, tickets, etc.</div>
+            <form id="demo-form-3">
+                <label for="editor3">Custom Toolbar Editor:</label>
+                <textarea id="editor3" class="js-rich-text-editor" name="content3" rows="6">
+Try <b>bold</b>, <i>italic</i>, <u>underline</u>, <s>strikethrough</s>, <a href="#">link</a>, and lists.
+        </textarea>
+                <br>
+                <button type="submit">Submit</button>
+                <div class="output" id="output3" style="display:none"></div>
+            </form>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>4. Editor with Only Source Code Mode</h2>
+            <div class="desc">Only source code editing is enabled. Useful for HTML editing or admin panels.</div>
+            <form id="demo-form-4">
+                <label for="editor4">Source Code Only Editor:</label>
+                <textarea id="editor4" class="js-rich-text-editor" name="content4" rows="6">
+&lt;p&gt;Edit HTML directly here!&lt;/p&gt;
+        </textarea>
+                <br>
+                <button type="submit">Submit</button>
+                <div class="output" id="output4" style="display:none"></div>
+            </form>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>5. Editor with Table, Emoji, and Special Characters Only</h2>
+            <div class="desc">For inserting tables, emojis, and special characters only.</div>
+            <form id="demo-form-5">
+                <label for="editor5">Table/Emoji/Symbol Editor:</label>
+                <textarea id="editor5" class="js-rich-text-editor editor5" name="content5" rows="6">
+Insert a table, emoji, or special character!
+        </textarea>
+                <br>
+                <button type="submit">Submit</button>
+                <div class="output" id="output5" style="display:none"></div>
+            </form>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>6. Editor in a Modal</h2>
+            <div class="desc">This editor appears inside a modal dialog. Useful for popups, dialogs, etc.</div>
+            <button type="button" id="open-modal-editor"
+                style="background:#2563eb;color:#fff;padding:0.6em 1.5em;border:none;border-radius:6px;font-size:1em;cursor:pointer;">Open
+                Editor Modal</button>
+            <div id="modal-editor-overlay"
+                style="display:none;position:fixed;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.22);align-items:center;justify-content:center;">
+                <div id="modal-editor-dialog"
+                    style="background:#fff;max-width:650px;width:96vw;padding:2em 1.5em 1.5em 1.5em;border-radius:12px;box-shadow:0 4px 32px rgba(0,0,0,0.18);margin:auto;position:relative;">
+                    <button type="button" id="close-modal-editor"
+                        style="position:absolute;top:1em;right:1em;background:none;border:none;font-size:1.5em;cursor:pointer;color:#64748b;">&times;</button>
+                    <h3 style="margin-top:0;color:#2563eb;">Modal Editor Example</h3>
+                    <form id="demo-form-6">
+                        <textarea id="editor6" class="js-rich-text-editor" name="content6" rows="8">
+<h2>Editor in a Modal</h2>
+<p>This editor is rendered inside a modal dialog.</p>
+<p>Try <b>bold</b>, <i>italic</i>, <u>underline</u>, <a href="#">link</a>, and more.</p>
+            </textarea>
+                        <br>
+                        <button type="submit">Submit</button>
+                        <div class="output" id="output6" style="display:none"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="editor-demo-block">
+            <h2>7. Email Compose Box Example</h2>
+            <div class="desc">A typical email compose box with To, CC, Subject, and a rich text area for the message.
+            </div>
+            <form id="demo-form-7" style="margin:0 auto;">
+                <div style="margin-bottom:0.7em;">
+                    <label for="email-to" style="font-weight:500;">To:</label>
+                    <input type="email" id="email-to" name="to" required multiple placeholder="recipient@example.com"
+                        style="width:100%;padding:0.5em;font-size:1em;border:1px solid #d1d5db;border-radius:4px;margin-bottom:0.5em;">
+                </div>
+                <div style="margin-bottom:0.7em;">
+                    <label for="email-cc" style="font-weight:500;">CC:</label>
+                    <input type="email" id="email-cc" name="cc" multiple placeholder="cc@example.com"
+                        style="width:100%;padding:0.5em;font-size:1em;border:1px solid #d1d5db;border-radius:4px;margin-bottom:0.5em;">
+                </div>
+                <div style="margin-bottom:0.7em;">
+                    <label for="email-subject" style="font-weight:500;">Subject:</label>
+                    <input type="text" id="email-subject" name="subject" required placeholder="Subject"
+                        style="width:100%;padding:0.5em;font-size:1em;border:1px solid #d1d5db;border-radius:4px;margin-bottom:0.5em;">
+                </div>
+                <label for="editor7">Message:</label>
+                <textarea id="editor7" class="js-rich-text-editor" name="content7" rows="10">
+<p>Hi John,</p>
+<p>Hope you are doing well.<br><br>Best regards,<br>Your Name</p>
+        </textarea>
+                <br>
+                <button type="submit"
+                    style="background:#2563eb;color:#fff;padding:0.7em 2.2em;border:none;border-radius:6px;font-size:1.08em;font-weight:600;cursor:pointer;">Send
+                    Email</button>
+                <div class="output" id="output7" style="display:none"></div>
+            </form>
+        </div>
+    </main>
+    <footer class="site-footer">
+        &copy; 2024 Rich Text Editor &mdash; <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+    <script>
+        // Full-featured editor
+        window.RichTextEditorConfig = window.RichTextEditorConfig || {};
+
+        // Minimal editor
+        window.RichTextEditorConfig['#editor2'] = [
+            'bold', 'italic', 'underline', 'separator',
+            'insertUnorderedList', 'insertOrderedList', 'separator',
+            'createLink', 'unlink'
+        ];
+
+        // Custom toolbar (no images, no tables)
+        window.RichTextEditorConfig['#editor3'] = [
+            'bold', 'italic', 'underline', 'strikethrough', 'separator',
+            'insertUnorderedList', 'insertOrderedList', 'separator',
+            'createLink', 'unlink', 'separator',
+            'removeFormat', 'source'
+        ];
+
+        // Source code only
+        window.RichTextEditorConfig['#editor4'] = [
+            'source'
+        ];
+
+        // Table, emoji, special char only
+        window.RichTextEditorConfig['.editor5'] = [
+            'table', 'emoji', 'specialChar', 'source'
+        ];
+
+        // Modal editor
+        window.RichTextEditorConfig['#editor6'] = [
+            'undo', 'redo', 'separator',
+            'bold', 'italic', 'underline', 'separator',
+            'insertUnorderedList', 'insertOrderedList', 'separator',
+            'createLink', 'unlink', 'separator',
+            'fullscreen', 'preview', 'print', 'source', 'help'
+        ];
+
+        // Email compose box editor
+        window.RichTextEditorConfig['#editor7'] = [
+            'bold', 'italic', 'underline', 'strikethrough', 'separator',
+            'fontName', 'fontSize', 'separator',
+            'foreColor', 'hiliteColor', 'separator',
+            'insertUnorderedList', 'insertOrderedList', 'separator',
+            'createLink', 'unlink', 'insertImage', 'separator',
+            'formatBlock', 'separator',
+            'removeFormat'
+        ];
+    </script>
+    <script src="src/rich-text-editor.js"></script>
+    <script>
+        function handleFormSubmit(formId, outputId) {
+            document.getElementById(formId).addEventListener('submit', function (e) {
+                e.preventDefault();
+                var content = this.querySelector('textarea').value;
+                var output = document.getElementById(outputId);
+                output.style.display = 'block';
+                output.innerHTML = '<b>Submitted HTML:</b><br><pre>' +
+                    content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+            });
+        }
+        handleFormSubmit('demo-form-1', 'output1');
+        handleFormSubmit('demo-form-2', 'output2');
+        handleFormSubmit('demo-form-3', 'output3');
+        handleFormSubmit('demo-form-4', 'output4');
+        handleFormSubmit('demo-form-5', 'output5');
+        handleFormSubmit('demo-form-6', 'output6');
+        // Modified for email compose box to show all fields
+        document.getElementById('demo-form-7').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var to = this.elements['to'].value;
+            var cc = this.elements['cc'].value;
+            var subject = this.elements['subject'].value;
+            var content = this.elements['content7'].value;
+            var output = document.getElementById('output7');
+            output.style.display = 'block';
+            output.innerHTML = '<b>To:</b> ' + to + '<br>' +
+                (cc ? '<b>CC:</b> ' + cc + '<br>' : '') +
+                '<b>Subject:</b> ' + subject + '<br>' +
+                '<b>Message HTML:</b><br><pre>' +
+                content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+        });
+
+        // Modal logic
+        document.getElementById('open-modal-editor').onclick = function () {
+            document.getElementById('modal-editor-overlay').style.display = 'flex';
+            setTimeout(function () {
+                // Focus the editor after modal opens
+                var ed = document.getElementById('editor6');
+                if (ed && ed.nextElementSibling && ed.nextElementSibling.querySelector('.rich-text-editor-content')) {
+                    ed.nextElementSibling.querySelector('.rich-text-editor-content').focus();
+                }
+            }, 200);
+        };
+        document.getElementById('close-modal-editor').onclick = function () {
+            document.getElementById('modal-editor-overlay').style.display = 'none';
+        };
+        // Optional: close modal on overlay click
+        document.getElementById('modal-editor-overlay').onclick = function (e) {
+            if (e.target === this) this.style.display = 'none';
+        };
+    </script>
+</body>
+
+</html>
