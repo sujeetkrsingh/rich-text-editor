@@ -3,6 +3,10 @@
 A modern, dependency-free, customizable rich text editor for the web.  
 Inspired by best practices from popular editors, but written from scratch using modern browser APIs.
 
+## Demo
+
+[Live Demo](https://sujeetkrsingh.github.io/rich-text-editor/)
+
 ## Features
 
 - **Bold, Italic, Underline, Strikethrough, Superscript, Subscript**
@@ -29,6 +33,26 @@ Inspired by best practices from popular editors, but written from scratch using 
     <script src="src/rich-text-editor.js"></script>
     ```
 
+## CDN
+
+You can use the Rich Text Editor directly from CDN:
+
+**CSS:**
+```
+https://cdn.jsdelivr.net/gh/sujeetkrsingh/rich-text-editor/src/rich-text-editor.css
+```
+
+**JS:**
+```
+https://cdn.jsdelivr.net/gh/sujeetkrsingh/rich-text-editor/src/rich-text-editor.js
+```
+
+**Add to your HTML:**
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sujeetkrsingh/rich-text-editor/src/rich-text-editor.css" />
+<script src="https://cdn.jsdelivr.net/gh/sujeetkrsingh/rich-text-editor/src/rich-text-editor.js"></script>
+```
+
 ## Basic Usage
 
 Add a textarea with the class `js-rich-text-editor`:
@@ -37,7 +61,7 @@ Add a textarea with the class `js-rich-text-editor`:
 <textarea class="js-rich-text-editor" name="content"></textarea>
 ```
 
-The editor will automatically replace the textarea on page load.
+On page load, the editor will automatically replace the textarea with a rich text editor.
 
 ## Custom Toolbar
 
@@ -64,6 +88,23 @@ Or target a specific editor:
 window.RichTextEditorConfig = {
   '#myTextarea': ['bold', 'italic', 'underline', 'link', 'ul', 'ol', 'undo', 'redo']
 };
+```
+
+## Custom Toolbar Example
+
+```html
+<script>
+window.RichTextEditorConfig = {
+  toolbar: [
+    'bold', 'italic', 'underline', 'separator',
+    'foreColor', 'hiliteColor', 'separator',
+    'insertUnorderedList', 'insertOrderedList', 'separator',
+    'createLink', 'unlink', 'separator',
+    'table', 'emoji', 'specialChar', 'datetime', 'separator',
+    'fullscreen', 'preview', 'print', 'source', 'help'
+  ]
+};
+</script>
 ```
 
 ## Keyboard Shortcuts
